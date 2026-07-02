@@ -24,6 +24,12 @@
   --font-b:   'Cormorant Garamond', serif;
   --font-l:   'Cinzel', serif;
   --glow:     none;
+  --dyn-opacity: 0;
+  --dyn-speed: 26s;
+  --dyn-blur: 34px;
+  --dyn-orb-1: rgba(169, 128, 47, .28);
+  --dyn-orb-2: rgba(199, 155, 60, .18);
+  --dyn-orb-3: rgba(255, 255, 255, .12);
 }
 
 /* ===== ANIME THEME ===== */
@@ -81,6 +87,12 @@
   --font-b:   'Cormorant Garamond', serif;
   --font-l:   'Cinzel', serif;
   --glow:     none;
+  --dyn-opacity: .62;
+  --dyn-speed: 30s;
+  --dyn-blur: 40px;
+  --dyn-orb-1: rgba(144, 96, 224, .26);
+  --dyn-orb-2: rgba(192, 144, 255, .18);
+  --dyn-orb-3: rgba(255, 255, 255, .06);
 }
 
 /* ===== SAKURA THEME (light anime) ===== */
@@ -119,6 +131,12 @@
   --font-b:   'Cormorant Garamond', serif;
   --font-l:   'Cinzel', serif;
   --glow:     0 0 10px rgba(77, 184, 106, .2);
+  --dyn-opacity: .58;
+  --dyn-speed: 22s;
+  --dyn-blur: 32px;
+  --dyn-orb-1: rgba(77, 184, 106, .24);
+  --dyn-orb-2: rgba(109, 229, 128, .16);
+  --dyn-orb-3: rgba(255, 255, 255, .05);
 }
 
 /* ===== OCEAN THEME ===== */
@@ -138,6 +156,12 @@
   --font-b:   'Cormorant Garamond', serif;
   --font-l:   'Cinzel', serif;
   --glow:     0 0 12px rgba(59, 168, 216, .25);
+  --dyn-opacity: .62;
+  --dyn-speed: 28s;
+  --dyn-blur: 36px;
+  --dyn-orb-1: rgba(59, 168, 216, .24);
+  --dyn-orb-2: rgba(92, 200, 248, .18);
+  --dyn-orb-3: rgba(255, 255, 255, .08);
 }
 
 /* ===== SUNSET THEME ===== */
@@ -157,6 +181,12 @@
   --font-b:   'Cormorant Garamond', serif;
   --font-l:   'Cinzel', serif;
   --glow:     0 0 14px rgba(232, 124, 74, .2);
+  --dyn-opacity: .6;
+  --dyn-speed: 24s;
+  --dyn-blur: 34px;
+  --dyn-orb-1: rgba(232, 124, 74, .26);
+  --dyn-orb-2: rgba(255, 155, 111, .2);
+  --dyn-orb-3: rgba(245, 220, 200, .09);
 }
 
 /* ===== MIDNIGHT THEME (Cosmos) ===== */
@@ -176,6 +206,12 @@
   --font-b:   'Cormorant Garamond', serif;
   --font-l:   'Cinzel', serif;
   --glow:     0 0 16px rgba(123, 91, 184, .25);
+  --dyn-opacity: .66;
+  --dyn-speed: 32s;
+  --dyn-blur: 42px;
+  --dyn-orb-1: rgba(123, 91, 184, .28);
+  --dyn-orb-2: rgba(167, 111, 216, .2);
+  --dyn-orb-3: rgba(232, 217, 248, .08);
 }
 
 
@@ -212,6 +248,52 @@ body::before {
 [data-theme=cyber] body::before {
   background-image: repeating-linear-gradient(0deg, var(--accent) 0 1px, transparent 1px 7px);
   opacity: 0.025;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--dyn-opacity, 0);
+  background:
+    radial-gradient(circle at 20% 20%, var(--dyn-orb-1, transparent) 0 18%, transparent 52%),
+    radial-gradient(circle at 80% 30%, var(--dyn-orb-2, transparent) 0 16%, transparent 48%),
+    radial-gradient(circle at 50% 80%, var(--dyn-orb-3, transparent) 0 14%, transparent 46%);
+  background-size: 120% 120%;
+  filter: blur(var(--dyn-blur, 32px)) saturate(1.05);
+  transform: translate3d(0, 0, 0);
+  animation: dyn-drift var(--dyn-speed, 24s) ease-in-out infinite alternate;
+}
+
+@keyframes dyn-drift {
+  0% {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+    background-position: 0% 0%, 100% 0%, 50% 100%;
+  }
+  50% {
+    transform: translate3d(1%, 2%, 0) scale(1.03);
+    background-position: 15% 20%, 78% 22%, 42% 82%;
+  }
+  100% {
+    transform: translate3d(2%, -2%, 0) scale(1.06);
+    background-position: 28% 12%, 62% 34%, 55% 70%;
+  }
+}
+
+[data-theme=anime] body::after,
+[data-theme=sakura] body::after,
+[data-theme=cyber] body::after {
+  opacity: 0;
+  animation: none;
+}
+
+[data-theme=classique] body::after {
+  opacity: .28;
+  --dyn-orb-1: rgba(169, 128, 47, .18);
+  --dyn-orb-2: rgba(215, 187, 124, .12);
+  --dyn-orb-3: rgba(255, 255, 255, .08);
 }
 
 
