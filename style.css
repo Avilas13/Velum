@@ -1,0 +1,651 @@
+/* ============================================================
+   VELUM — style.css
+   ============================================================
+   To customise themes, edit the CSS variables in each
+   [data-theme=...] block below.
+   To add a new theme: copy a block, change the selector name,
+   update the colours, then add a card in index.html.
+   ============================================================ */
+
+/* ===== BASE THEME: Classique (Louis Vuitton inspired) ===== */
+:root {
+  --bg:       #f3ead9;
+  --bg2:      #ece0c9;
+  --panel:    #fbf6ec;
+  --line:     #d8c79f;
+  --ink:      #2a1d14;
+  --sub:      #4a3a28;
+  --accent:   #a9802f;
+  --accent2:  #c79b3c;
+  --muted:    #8b7757;
+  --danger:   #8c3a2e;
+  --r:        3px;
+  --font-d:   'Playfair Display', serif;
+  --font-b:   'Cormorant Garamond', serif;
+  --font-l:   'Cinzel', serif;
+  --glow:     none;
+}
+
+/* ===== ANIME THEME ===== */
+[data-theme=anime] {
+  --bg:       #12001e;
+  --bg2:      #1a0028;
+  --panel:    #1e0030;
+  --line:     #6a1a8a55;
+  --ink:      #fce4ff;
+  --sub:      #e0a0ff;
+  --accent:   #d460f8;
+  --accent2:  #ff6ec7;
+  --muted:    #9b5bc0;
+  --danger:   #ff4488;
+  --r:        16px;
+  --font-d:   'Noto Serif JP', serif;
+  --font-b:   'Noto Serif JP', serif;
+  --font-l:   'Cinzel', serif;
+  --glow:     0 0 12px var(--accent), 0 0 30px rgba(212, 96, 248, .3);
+}
+
+/* ===== CYBERPUNK THEME ===== */
+[data-theme=cyber] {
+  --bg:       #06080f;
+  --bg2:      #0b0e18;
+  --panel:    #0d1120;
+  --line:     #00ffe428;
+  --ink:      #e0fff8;
+  --sub:      #00ffe4;
+  --accent:   #00ffe4;
+  --accent2:  #ff00cc;
+  --muted:    #4ab8a8;
+  --danger:   #ff003c;
+  --r:        0px;
+  --font-d:   'Orbitron', sans-serif;
+  --font-b:   'Share Tech Mono', monospace;
+  --font-l:   'Orbitron', sans-serif;
+  --glow:     0 0 8px var(--accent), 0 0 24px var(--accent);
+}
+
+/* ===== NOIR THEME ===== */
+[data-theme=noir] {
+  --bg:       #0e0c14;
+  --bg2:      #16132a;
+  --panel:    #19162a;
+  --line:     #33285544;
+  --ink:      #f0eaf8;
+  --sub:      #b8a0e0;
+  --accent:   #9060e0;
+  --accent2:  #c090ff;
+  --muted:    #6a5a90;
+  --danger:   #ff6080;
+  --r:        6px;
+  --font-d:   'Playfair Display', serif;
+  --font-b:   'Cormorant Garamond', serif;
+  --font-l:   'Cinzel', serif;
+  --glow:     none;
+}
+
+/* ===== SAKURA THEME (light anime) ===== */
+[data-theme=sakura] {
+  --bg:       #fff0f5;
+  --bg2:      #ffdce8;
+  --panel:    #fff8fb;
+  --line:     #ffb6d0;
+  --ink:      #3a0e28;
+  --sub:      #c2447a;
+  --accent:   #e8538c;
+  --accent2:  #ff8fcb;
+  --muted:    #c47fa8;
+  --danger:   #d63a60;
+  --r:        22px;
+  --font-d:   'Noto Serif JP', serif;
+  --font-b:   'Noto Serif JP', serif;
+  --font-l:   'Cinzel', serif;
+  --glow:     none;
+}
+
+
+/* ============================================================
+   GLOBAL RESET
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; }
+
+body {
+  color: var(--ink);
+  font-family: var(--font-b);
+  font-size: 17px;
+  background: var(--bg);
+  transition: background .4s, color .4s;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Subtle diagonal grid texture */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  opacity: 0.045;
+  background-image:
+    repeating-linear-gradient(45deg,  var(--sub) 0 1px, transparent 1px 38px),
+    repeating-linear-gradient(-45deg, var(--sub) 0 1px, transparent 1px 38px);
+  transition: opacity .4s;
+}
+[data-theme=anime] body::before,
+[data-theme=noir]  body::before,
+[data-theme=cyber] body::before { opacity: 0.03; }
+[data-theme=cyber] body::before {
+  background-image: repeating-linear-gradient(0deg, var(--accent) 0 1px, transparent 1px 7px);
+  opacity: 0.025;
+}
+
+
+/* ============================================================
+   SAKURA PETALS
+   ============================================================ */
+#petals {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 1;
+  overflow: hidden; display: none;
+}
+[data-theme=anime]  #petals,
+[data-theme=sakura] #petals { display: block; }
+
+.petal {
+  position: absolute; top: -40px;
+  width: 10px; height: 14px;
+  border-radius: 50% 50% 50% 0;
+  opacity: 0;
+  /* Duration set via JS (18–38 s) */
+  animation: fall ease-in-out infinite;
+}
+[data-theme=anime]  .petal { background: rgba(212, 96, 248, .55); }
+[data-theme=sakura] .petal { background: rgba(232, 83, 140, .45); }
+
+@keyframes fall {
+  0%   { transform: translateY(0)     translateX(0)    rotate(0deg);   opacity: .85; }
+  50%  { transform: translateY(50vh)  translateX(30px) rotate(180deg); opacity: .6;  }
+  100% { transform: translateY(110vh) translateX(-20px)rotate(360deg); opacity: 0;   }
+}
+
+
+/* ============================================================
+   MASCOT (bunny, bottom-right)
+   ============================================================ */
+#mascot {
+  position: fixed; bottom: 0; right: 32px;
+  width: 110px; z-index: 10;
+  cursor: pointer;
+  filter: drop-shadow(0 4px 18px rgba(0,0,0,.22));
+  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1);
+  animation: bob 3.5s ease-in-out infinite;
+}
+#mascot:hover { transform: scale(1.12) translateY(-6px); }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+#mascot .speech {
+  position: absolute; bottom: 115%; right: 0;
+  background: var(--panel);
+  border: 1.5px solid var(--line);
+  border-radius: 14px 14px 4px 14px;
+  padding: 8px 12px;
+  font-size: 11.5px;
+  font-family: var(--font-b); font-style: italic;
+  color: var(--ink);
+  box-shadow: 0 4px 20px rgba(0,0,0,.12);
+  opacity: 0;
+  transform: scale(.8) translateY(6px);
+  transition: opacity .25s, transform .25s;
+  pointer-events: none;
+  max-width: 180px; white-space: normal;
+  text-align: center; line-height: 1.4;
+}
+#mascot:hover .speech { opacity: 1; transform: scale(1) translateY(0); }
+
+/* Hat colour overrides per theme */
+[data-theme=anime]  #mascot svg .hat { fill: #4a80e8; }
+[data-theme=sakura] #mascot svg .hat { fill: #e8538c; }
+[data-theme=cyber]  #mascot svg .hat { fill: #00b8a8; }
+[data-theme=noir]   #mascot svg .hat { fill: #9060e0; }
+
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.app {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 52px 28px 90px;
+  position: relative; z-index: 2;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+header {
+  display: flex; align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap; gap: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 22px;
+  transition: border-color .4s;
+}
+
+.brand .eyebrow {
+  font-family: var(--font-l);
+  font-size: 10px; letter-spacing: 0.38em;
+  color: var(--accent); text-transform: uppercase;
+  margin-bottom: 6px;
+  text-shadow: var(--glow);
+  transition: color .4s, text-shadow .4s;
+}
+.brand .wordmark {
+  font-family: var(--font-d);
+  font-weight: 700; font-style: italic;
+  font-size: 42px; letter-spacing: 0.01em;
+  color: var(--ink); line-height: 1;
+  text-shadow: var(--glow);
+  transition: color .4s, text-shadow .4s;
+}
+[data-theme=cyber] .brand .wordmark {
+  font-style: normal; letter-spacing: 0.06em;
+}
+[data-theme=anime] .brand .wordmark::after {
+  content: " ヴェルム";
+  font-size: 0.4em; letter-spacing: 0.08em;
+  opacity: 0.5; vertical-align: middle;
+}
+.brand .sub {
+  font-family: var(--font-l);
+  font-size: 9.5px; letter-spacing: 0.25em;
+  color: var(--muted); text-transform: uppercase;
+  margin-top: 6px; transition: color .4s;
+}
+.header-right {
+  display: flex; gap: 10px;
+  align-items: center; flex-wrap: wrap;
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+button { font-family: inherit; cursor: pointer; }
+
+.btn {
+  background: transparent;
+  border: 1px solid var(--ink); color: var(--ink);
+  padding: 10px 18px; border-radius: var(--r);
+  font-family: var(--font-l); font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+  transition: background .2s, color .2s, border-color .2s, box-shadow .2s;
+}
+.btn:hover               { background: var(--ink); color: var(--bg); }
+.btn.primary             { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn.primary:hover       { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.btn.ghost               { border-color: var(--line); color: var(--muted); font-size: 9px; padding: 7px 11px; }
+.btn.ghost:hover         { background: var(--bg2); color: var(--ink); }
+.btn.danger              { border-color: var(--danger); color: var(--danger); }
+.btn.danger:hover        { background: var(--danger); color: var(--bg); }
+[data-theme=cyber] .btn  { box-shadow: var(--glow); }
+[data-theme=anime] .btn  { box-shadow: 0 0 8px rgba(212,96,248,.2); }
+
+/* Customise toggle button (circle) */
+.cust-btn {
+  width: 38px; height: 38px;
+  border: 1px solid var(--line);
+  background: var(--panel); color: var(--muted);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+  transition: all .2s;
+}
+.cust-btn:hover {
+  border-color: var(--accent); color: var(--accent);
+  box-shadow: var(--glow);
+}
+
+
+/* ============================================================
+   CUSTOMISE PANEL (slide-in from right)
+   ============================================================ */
+#custPanel {
+  position: fixed; top: 0; right: -300px;
+  width: 280px; height: 100vh;
+  background: var(--panel);
+  border-left: 1px solid var(--line);
+  z-index: 300;
+  transition: right .3s cubic-bezier(.4,0,.2,1);
+  padding: 28px 22px; overflow-y: auto;
+  box-shadow: -8px 0 40px rgba(0,0,0,.18);
+}
+#custPanel.open { right: 0; }
+
+#custPanel h3 {
+  font-family: var(--font-l); font-size: 10px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+}
+#custPanel .section       { margin-bottom: 24px; }
+#custPanel .section-title {
+  font-family: var(--font-l); font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 7px; margin-bottom: 12px;
+}
+
+/* Theme cards grid */
+.theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.t-card {
+  padding: 13px 8px; border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer; text-align: center;
+  transition: all .2s;
+  font-size: 10.5px; font-family: var(--font-l);
+  letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.4;
+}
+.t-card:hover          { transform: translateY(-2px); }
+.t-card.active         { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(169,128,47,.15); }
+.tc1 { background: #f3ead9; color: #4a3a28; border-color: #d8c79f; }
+.tc2 { background: #12001e; color: #d460f8; border-color: #6a1a8a55; }
+.tc3 { background: #fff0f5; color: #e8538c; border-color: #ffb6d0; }
+.tc4 { background: #06080f; color: #00ffe4; border-color: #00ffe428; font-family: 'Share Tech Mono', monospace; }
+.tc5 { background: #0e0c14; color: #9060e0; border-color: #33285544; }
+
+/* Font pills */
+.font-pills { display: flex; flex-direction: column; gap: 6px; }
+.font-pill {
+  padding: 8px 12px; border-radius: 8px;
+  border: 1px solid var(--line);
+  cursor: pointer; font-size: 13px;
+  color: var(--ink); background: transparent;
+  transition: all .2s; text-align: left;
+}
+.font-pill:hover  { background: var(--bg2); }
+.font-pill.active { border-color: var(--accent); color: var(--accent); }
+
+/* Close button inside panel */
+.panel-close {
+  position: absolute; top: 14px; right: 14px;
+  background: transparent; border: none;
+  font-size: 17px; color: var(--muted); cursor: pointer;
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.panel-close:hover { background: var(--bg2); }
+
+/* Dark overlay behind panel */
+#overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.35);
+  z-index: 299; display: none;
+}
+#overlay.show { display: block; }
+
+
+/* ============================================================
+   QUOTE BANNER
+   ============================================================ */
+.quote-banner {
+  text-align: center;
+  font-family: var(--font-d); font-style: italic;
+  font-size: 16px; color: var(--sub);
+  padding: 18px 12px 26px;
+  letter-spacing: 0.01em;
+  transition: color .4s, font-family .4s;
+}
+[data-theme=cyber] .quote-banner { font-style: normal; font-size: 12px; letter-spacing: 0.1em; }
+.ql, .qr { color: var(--accent); font-size: 20px; text-shadow: var(--glow); }
+
+
+/* ============================================================
+   FILE ACTIONS (export / import / save)
+   ============================================================ */
+.file-actions {
+  display: flex; gap: 7px;
+  justify-content: flex-end;
+  margin-bottom: 12px; flex-wrap: wrap;
+}
+#importFile { display: none; }
+
+
+/* ============================================================
+   ADD LINK ROW
+   ============================================================ */
+.add-row {
+  display: flex; gap: 9px;
+  margin: 26px 0 40px; flex-wrap: wrap;
+}
+.add-row input,
+.add-row select {
+  background: var(--panel);
+  border: 1px solid var(--line); color: var(--ink);
+  padding: 13px 15px; border-radius: var(--r);
+  font-family: var(--font-b); font-size: 15px;
+  flex: 1; min-width: 140px;
+  transition: border-color .2s, background .4s;
+}
+.add-row input::placeholder { color: var(--muted); font-style: italic; }
+.add-row input:focus,
+.add-row select:focus { outline: none; border-color: var(--accent); }
+[data-theme=anime] .add-row input:focus,
+[data-theme=sakura] .add-row input:focus {
+  box-shadow: 0 0 0 3px rgba(212,96,248,.15);
+}
+
+
+/* ============================================================
+   COLLECTION GROUPS
+   ============================================================ */
+.group {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  margin-bottom: 18px; overflow: hidden;
+  position: relative;
+  transition: background .4s, border-color .4s;
+}
+/* Left accent bar */
+.group::before {
+  content: ""; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--accent); transition: background .4s;
+}
+[data-theme=anime] .group {
+  background: linear-gradient(135deg, var(--panel) 80%, rgba(212,96,248,.07));
+  box-shadow: 0 2px 18px rgba(212,96,248,.1);
+}
+[data-theme=cyber] .group {
+  box-shadow: inset 0 0 0 1px var(--line), var(--glow);
+}
+
+.group-head {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 17px 22px 17px 26px;
+  cursor: pointer; user-select: none;
+}
+.group-title { display: flex; align-items: center; gap: 12px; }
+
+.topic-icon {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+  border: 1px solid var(--line); background: var(--bg);
+  transition: all .4s;
+}
+[data-theme=anime] .topic-icon {
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 8px rgba(212,96,248,.3);
+}
+
+.group-title h2 {
+  font-family: var(--font-d); font-size: 18px;
+  font-weight: 700; letter-spacing: 0.01em;
+  color: var(--ink); transition: color .4s;
+}
+.count {
+  color: var(--muted); font-size: 11px;
+  font-family: var(--font-l); letter-spacing: 0.1em;
+}
+
+.group-tools { display: flex; gap: 5px; align-items: center; }
+.icon-btn {
+  background: transparent; color: var(--muted); border: none;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: background .15s, color .15s;
+}
+.icon-btn:hover     { background: var(--bg2); color: var(--ink); }
+.icon-btn.del:hover { color: var(--danger); }
+
+.chev {
+  transition: transform .2s;
+  color: var(--accent); font-size: 18px;
+  font-family: var(--font-d);
+}
+.chev.open { transform: rotate(90deg); }
+
+
+/* ============================================================
+   LINKS INSIDE A GROUP
+   ============================================================ */
+.links {
+  padding: 0 12px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.link-row {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: calc(var(--r) - 2px);
+  border-top: 1px solid rgba(216,199,159,.35);
+  transition: background .15s;
+}
+.links .link-row:first-child { border-top: none; }
+.link-row:hover                         { background: var(--bg2); }
+[data-theme=anime] .link-row:hover      { background: rgba(212,96,248,.08); }
+
+.link-main {
+  display: flex; align-items: center; gap: 11px;
+  overflow: hidden; flex: 1; cursor: pointer;
+}
+.fav {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  background: var(--bg2); overflow: hidden;
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--muted);
+}
+.fav img { width: 100%; height: 100%; object-fit: cover; }
+
+.link-text { overflow: hidden; }
+.link-name {
+  font-size: 15.5px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.link-url {
+  font-size: 11.5px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-style: italic;
+}
+
+.link-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.vbadge {
+  font-family: var(--font-l); font-size: 9px; letter-spacing: 0.08em;
+  color: var(--accent);
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 2px 8px; white-space: nowrap;
+  text-shadow: var(--glow); transition: color .4s;
+}
+
+.link-del {
+  background: transparent; color: var(--muted); border: none;
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; opacity: 0;
+  transition: opacity .15s, color .15s, background .15s;
+}
+.link-row:hover .link-del { opacity: 1; }
+.link-del:hover            { color: var(--danger); background: var(--bg2); }
+
+
+/* ============================================================
+   EMPTY STATES
+   ============================================================ */
+.empty { text-align: center; padding: 50px 20px; color: var(--muted); }
+.empty .big {
+  font-family: var(--font-d); font-size: 18px;
+  font-style: italic; color: var(--ink); margin-bottom: 6px;
+}
+.empty .sm { font-size: 13.5px; }
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  margin-top: 50px; padding-top: 22px;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: center;
+}
+.clr-btn {
+  background: none; color: var(--muted);
+  font-size: 10px; font-family: var(--font-l);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  text-decoration: underline;
+}
+.clr-btn:hover { color: var(--danger); }
+
+
+/* ============================================================
+   TOAST NOTIFICATION
+   ============================================================ */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--bg);
+  padding: 11px 22px; border-radius: var(--r);
+  font-size: 12px; font-family: var(--font-l); letter-spacing: 0.1em;
+  opacity: 0; transition: opacity .2s, transform .2s;
+  pointer-events: none;
+  box-shadow: 0 8px 30px rgba(0,0,0,.25); z-index: 400;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+
+/* ============================================================
+   CONFIRM MODAL
+   ============================================================ */
+.modal-wrap {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.5);
+  display: none; align-items: center; justify-content: center;
+  z-index: 350; padding: 20px;
+}
+.modal-wrap.show { display: flex; }
+.modal {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 26px;
+  width: 100%; max-width: 360px;
+  border-top: 3px solid var(--accent);
+}
+.modal h3  { font-family: var(--font-d); font-size: 18px; font-style: italic; margin-bottom: 10px; }
+.modal p   { color: var(--muted); font-size: 14px; line-height: 1.55; margin-bottom: 20px; }
+.modal-btns { display: flex; gap: 9px; justify-content: flex-end; }
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 520px) {
+  .add-row { flex-direction: column; }
+  .brand .wordmark { font-size: 32px; }
+  #custPanel { width: 100%; right: -100%; }
+}

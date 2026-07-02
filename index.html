@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VELUM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@500;700&family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="classique">
+
+  <!-- Floating sakura petals (shown on anime/sakura themes) -->
+  <div id="petals"></div>
+
+  <div class="app">
+
+    <!-- ===== HEADER ===== -->
+    <header>
+      <div class="brand">
+        <div class="eyebrow">Maison Numérique · Est. Today</div>
+        <div class="wordmark">Velum</div>
+        <div class="sub">Your curated link collections</div>
+      </div>
+      <div class="header-right">
+        <button class="btn" id="newGroupBtn">+ New Collection</button>
+        <button class="cust-btn" id="custBtn" title="Customise">✦</button>
+      </div>
+    </header>
+
+    <!-- ===== MOTIVATIONAL QUOTE ===== -->
+    <div class="quote-banner">
+      <span class="ql">"</span><span id="quoteText"></span><span class="qr">"</span>
+    </div>
+
+    <!-- ===== FILE ACTIONS ===== -->
+    <div class="file-actions">
+      <button class="btn ghost" id="exportBtn">Export ↓</button>
+      <button class="btn ghost" id="importBtn">Import ↑</button>
+      <button class="btn ghost" id="diskBtn">Save to disk</button>
+      <input type="file" id="importFile" accept="application/json">
+    </div>
+
+    <!-- ===== ADD LINK ROW ===== -->
+    <div class="add-row">
+      <select id="groupSel"></select>
+      <input id="nameIn" type="text" placeholder="Link name (optional)">
+      <input id="urlIn" type="text" placeholder="https://...">
+      <button class="btn primary" id="addBtn">Add Link</button>
+    </div>
+
+    <!-- ===== COLLECTIONS ===== -->
+    <div id="groups"></div>
+
+    <footer>
+      <button class="clr-btn" id="resetBtn">Clear all data</button>
+    </footer>
+
+  </div><!-- /.app -->
+
+  <!-- ===== BUNNY MASCOT ===== -->
+  <div id="mascot">
+    <div class="speech" id="mascotSpeech">Ready to organise! 🐇</div>
+    <svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- Left ear (long floppy) -->
+      <ellipse cx="38" cy="42" rx="10" ry="34" fill="#f0e8e0" stroke="#d4c4b0" stroke-width="1.2"/>
+      <ellipse cx="38" cy="42" rx="6" ry="28" fill="#f5c0c8" opacity=".6"/>
+      <!-- Right ear -->
+      <ellipse cx="82" cy="36" rx="10" ry="34" fill="#f0e8e0" stroke="#d4c4b0" stroke-width="1.2" transform="rotate(-12 82 36)"/>
+      <ellipse cx="82" cy="36" rx="6" ry="28" fill="#f5c0c8" opacity=".6" transform="rotate(-12 82 36)"/>
+      <!-- Body (blue uniform jacket) -->
+      <ellipse cx="60" cy="118" rx="30" ry="26" fill="#2a5abf"/>
+      <!-- Uniform collar / lapels -->
+      <polygon points="50,96 60,108 70,96 65,92 55,92" fill="#1a3a90"/>
+      <!-- Red bow/necktie -->
+      <polygon points="54,97 66,97 63,104 57,104" fill="#c0282a"/>
+      <ellipse cx="60" cy="100" rx="4" ry="3.5" fill="#e03030"/>
+      <!-- Gold trim on jacket -->
+      <rect x="55" y="103" width="10" height="2" rx="1" fill="#e8b830"/>
+      <rect x="53" y="108" width="14" height="2" rx="1" fill="#e8b830"/>
+      <!-- Buttons -->
+      <circle cx="60" cy="114" r="2" fill="#e8b830"/>
+      <circle cx="60" cy="121" r="2" fill="#e8b830"/>
+      <!-- Skirt / bottom -->
+      <path d="M30,130 Q40,150 60,152 Q80,150 90,130 Z" fill="#8c1a1a"/>
+      <!-- Head -->
+      <ellipse cx="60" cy="80" rx="28" ry="26" fill="#f5ede6" stroke="#d4c4b0" stroke-width="1"/>
+      <!-- Cheek blush -->
+      <ellipse cx="44" cy="86" rx="7" ry="4" fill="#ffb0b8" opacity=".45"/>
+      <ellipse cx="76" cy="86" rx="7" ry="4" fill="#ffb0b8" opacity=".45"/>
+      <!-- Eyes -->
+      <ellipse cx="49" cy="78" rx="6.5" ry="7" fill="#fff"/>
+      <ellipse cx="71" cy="78" rx="6.5" ry="7" fill="#fff"/>
+      <circle cx="50" cy="79" r="4.5" fill="#b03010"/>
+      <circle cx="72" cy="79" r="4.5" fill="#b03010"/>
+      <circle cx="50" cy="79" r="2.5" fill="#1a0800"/>
+      <circle cx="72" cy="79" r="2.5" fill="#1a0800"/>
+      <!-- Eye shine -->
+      <circle cx="52" cy="77" r="1.4" fill="white"/>
+      <circle cx="74" cy="77" r="1.4" fill="white"/>
+      <!-- Nose -->
+      <ellipse cx="60" cy="88" rx="3" ry="2" fill="#e07080"/>
+      <!-- Mouth smile -->
+      <path d="M55,91 Q60,96 65,91" fill="none" stroke="#c05060" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Whisker dots -->
+      <circle cx="46" cy="88" r="1" fill="#c0a090" opacity=".7"/>
+      <circle cx="41" cy="86" r="1" fill="#c0a090" opacity=".7"/>
+      <circle cx="74" cy="88" r="1" fill="#c0a090" opacity=".7"/>
+      <circle cx="79" cy="86" r="1" fill="#c0a090" opacity=".7"/>
+      <!-- Forehead spot -->
+      <circle cx="60" cy="66" r="3" fill="#e8d0c0" opacity=".8"/>
+      <!-- Top hat -->
+      <rect class="hat" x="40" y="46" width="40" height="26" rx="4" fill="#2a5abf"/>
+      <rect x="35" y="69" width="50" height="5" rx="2.5" fill="#1a3a90"/>
+      <!-- Hat band gold -->
+      <rect x="40" y="62" width="40" height="4" fill="#e8b830"/>
+      <!-- Hat badge -->
+      <circle cx="60" cy="64" r="4" fill="#e8d830" opacity=".9"/>
+      <circle cx="60" cy="64" r="2.5" fill="#c0a000"/>
+      <!-- Left arm raised wave -->
+      <ellipse cx="28" cy="108" rx="9" ry="14" fill="#2a5abf" transform="rotate(30 28 108)"/>
+      <!-- White paw hand -->
+      <circle cx="22" cy="97" r="8" fill="#f5ede6" stroke="#d4c4b0" stroke-width="1"/>
+      <circle cx="17" cy="93" r="3.5" fill="#f5ede6" stroke="#d4c4b0" stroke-width=".8"/>
+      <circle cx="22" cy="90" r="3.5" fill="#f5ede6" stroke="#d4c4b0" stroke-width=".8"/>
+      <circle cx="28" cy="92" r="3.5" fill="#f5ede6" stroke="#d4c4b0" stroke-width=".8"/>
+      <!-- Right arm holding link card -->
+      <ellipse cx="93" cy="108" rx="9" ry="14" fill="#2a5abf" transform="rotate(-25 93 108)"/>
+      <circle cx="100" cy="98" r="7.5" fill="#f5ede6" stroke="#d4c4b0" stroke-width="1"/>
+      <!-- Little card in hand -->
+      <rect x="96" y="87" width="18" height="12" rx="2" fill="#fff" stroke="#d4c4b0" stroke-width="1"/>
+      <rect x="97" y="89" width="12" height="2" rx="1" fill="#e8b830"/>
+      <rect x="97" y="93" width="8" height="1.5" rx=".75" fill="#d4c4b0"/>
+      <rect x="97" y="96" width="10" height="1.5" rx=".75" fill="#d4c4b0"/>
+      <!-- Feet/shoes -->
+      <ellipse cx="47" cy="148" rx="12" ry="7" fill="#1a1a6a"/>
+      <ellipse cx="73" cy="148" rx="12" ry="7" fill="#1a1a6a"/>
+    </svg>
+  </div>
+
+  <!-- ===== CUSTOMISE PANEL ===== -->
+  <div id="overlay"></div>
+  <div id="custPanel">
+    <button class="panel-close" id="custClose">✕</button>
+    <div class="section">
+      <h3>✦ Customise Velum</h3>
+    </div>
+    <div class="section">
+      <div class="section-title">Theme</div>
+      <div class="theme-grid">
+        <div class="t-card tc1 active" data-t="classique">Classique<br><small>LV Luxury</small></div>
+        <div class="t-card tc2" data-t="anime">Anime<br><small>ヴェルム</small></div>
+        <div class="t-card tc3" data-t="sakura">Sakura<br><small>桜</small></div>
+        <div class="t-card tc4" data-t="cyber">Cyber<br><small>PUNK</small></div>
+        <div class="t-card tc5" data-t="noir">Noir<br><small>Mystère</small></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Display Font</div>
+      <div class="font-pills">
+        <button class="font-pill active" data-font="">Default (theme)</button>
+        <button class="font-pill" data-font="'Playfair Display',serif" style="font-family:'Playfair Display',serif">Playfair Display</button>
+        <button class="font-pill" data-font="'Cormorant Garamond',serif" style="font-family:'Cormorant Garamond',serif">Cormorant Garamond</button>
+        <button class="font-pill" data-font="'Noto Serif JP',serif" style="font-family:'Noto Serif JP',serif">Noto Serif JP</button>
+        <button class="font-pill" data-font="'Orbitron',sans-serif" style="font-family:'Orbitron',sans-serif">Orbitron</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONFIRM MODAL ===== -->
+  <div class="modal-wrap" id="modal">
+    <div class="modal">
+      <h3 id="mTitle">Are you sure?</h3>
+      <p id="mBody">This cannot be undone.</p>
+      <div class="modal-btns">
+        <button class="btn" id="mCancel">Cancel</button>
+        <button class="btn danger" id="mOk">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
