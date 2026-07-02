@@ -1,5 +1,5 @@
 /* ============================================================
-   VELUM — style.css
+   VAULTÉ — style.css
    ============================================================
    To customise themes, edit the CSS variables in each
    [data-theme=...] block below.
@@ -102,6 +102,82 @@
   --glow:     none;
 }
 
+/* ===== FOREST THEME ===== */
+[data-theme=forest] {
+  --bg:       #0f2818;
+  --bg2:      #1a3d28;
+  --panel:    #1d4a2f;
+  --line:     #2d7a4c88;
+  --ink:      #d8f0dc;
+  --sub:      #a8d4b0;
+  --accent:   #4db86a;
+  --accent2:  #6de580;
+  --muted:    #6b9d7f;
+  --danger:   #ff7a6a;
+  --r:        12px;
+  --font-d:   'Playfair Display', serif;
+  --font-b:   'Cormorant Garamond', serif;
+  --font-l:   'Cinzel', serif;
+  --glow:     0 0 10px rgba(77, 184, 106, .2);
+}
+
+/* ===== OCEAN THEME ===== */
+[data-theme=ocean] {
+  --bg:       #0a1d2e;
+  --bg2:      #0f2d42;
+  --panel:    #12334a;
+  --line:     #3a8cb955;
+  --ink:      #c8e0f0;
+  --sub:      #7fb8e0;
+  --accent:   #3ba8d8;
+  --accent2:  #5cc8f8;
+  --muted:    #6a9abb;
+  --danger:   #ff6b7a;
+  --r:        16px;
+  --font-d:   'Playfair Display', serif;
+  --font-b:   'Cormorant Garamond', serif;
+  --font-l:   'Cinzel', serif;
+  --glow:     0 0 12px rgba(59, 168, 216, .25);
+}
+
+/* ===== SUNSET THEME ===== */
+[data-theme=sunset] {
+  --bg:       #3d1f1a;
+  --bg2:      #562a22;
+  --panel:    #6a3530;
+  --line:     #c47a6055;
+  --ink:      #f5dcc8;
+  --sub:      #f0a888;
+  --accent:   #e87c4a;
+  --accent2:  #ff9b6f;
+  --muted:    #d4967a;
+  --danger:   #c84a44;
+  --r:        14px;
+  --font-d:   'Playfair Display', serif;
+  --font-b:   'Cormorant Garamond', serif;
+  --font-l:   'Cinzel', serif;
+  --glow:     0 0 14px rgba(232, 124, 74, .2);
+}
+
+/* ===== MIDNIGHT THEME (Cosmos) ===== */
+[data-theme=midnight] {
+  --bg:       #0f0b1e;
+  --bg2:      #1a0f35;
+  --panel:    #251a4a;
+  --line:     #6b4da055;
+  --ink:      #e8d9f8;
+  --sub:      #b8a0d8;
+  --accent:   #7b5bb8;
+  --accent2:  #a76fd8;
+  --muted:    #8a6ba8;
+  --danger:   #ff7a9d;
+  --r:        18px;
+  --font-d:   'Playfair Display', serif;
+  --font-b:   'Cormorant Garamond', serif;
+  --font-l:   'Cinzel', serif;
+  --glow:     0 0 16px rgba(123, 91, 184, .25);
+}
+
 
 /* ============================================================
    GLOBAL RESET
@@ -168,48 +244,43 @@ body::before {
 }
 
 
-/* ============================================================
-   MASCOT (bunny, bottom-right)
-   ============================================================ */
-#mascot {
-  position: fixed; bottom: 0; right: 32px;
-  width: 110px; z-index: 10;
+/* Bunny */
+#bunny {
+  position: fixed;
+  left: 100px;
+  top: 100px;
+  font-size: 64px;
   cursor: pointer;
-  filter: drop-shadow(0 4px 18px rgba(0,0,0,.22));
-  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1);
-  animation: bob 3.5s ease-in-out infinite;
-}
-#mascot:hover { transform: scale(1.12) translateY(-6px); }
-
-@keyframes bob {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-10px); }
+  z-index: 9999;
+  transition:
+    transform 0.6s ease,
+    left 1s ease,
+    top 1s ease;
+  user-select: none;
 }
 
-#mascot .speech {
-  position: absolute; bottom: 115%; right: 0;
-  background: var(--panel);
-  border: 1.5px solid var(--line);
-  border-radius: 14px 14px 4px 14px;
+#bunny:hover {
+  transform: scale(1.1);
+}
+
+#speech {
+  position: fixed;
+  display: none;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 12px;
   padding: 8px 12px;
-  font-size: 11.5px;
-  font-family: var(--font-b); font-style: italic;
-  color: var(--ink);
-  box-shadow: 0 4px 20px rgba(0,0,0,.12);
-  opacity: 0;
-  transform: scale(.8) translateY(6px);
-  transition: opacity .25s, transform .25s;
-  pointer-events: none;
-  max-width: 180px; white-space: normal;
-  text-align: center; line-height: 1.4;
+  font-family: sans-serif;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
 }
-#mascot:hover .speech { opacity: 1; transform: scale(1) translateY(0); }
 
-/* Hat colour overrides per theme */
-[data-theme=anime]  #mascot svg .hat { fill: #4a80e8; }
-[data-theme=sakura] #mascot svg .hat { fill: #e8538c; }
-[data-theme=cyber]  #mascot svg .hat { fill: #00b8a8; }
-[data-theme=noir]   #mascot svg .hat { fill: #9060e0; }
+#toggleBunny {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10001;
+}
 
 
 /* ============================================================
@@ -356,6 +427,10 @@ button { font-family: inherit; cursor: pointer; }
 .tc3 { background: #fff0f5; color: #e8538c; border-color: #ffb6d0; }
 .tc4 { background: #06080f; color: #00ffe4; border-color: #00ffe428; font-family: 'Share Tech Mono', monospace; }
 .tc5 { background: #0e0c14; color: #9060e0; border-color: #33285544; }
+.tc6 { background: #0f2818; color: #4db86a; border-color: #2d7a4c88; }
+.tc7 { background: #0a1d2e; color: #3ba8d8; border-color: #3a8cb955; }
+.tc8 { background: #3d1f1a; color: #e87c4a; border-color: #c47a6055; }
+.tc9 { background: #0f0b1e; color: #7b5bb8; border-color: #6b4da055; }
 
 /* Font pills */
 .font-pills { display: flex; flex-direction: column; gap: 6px; }

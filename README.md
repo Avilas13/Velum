@@ -1,4 +1,4 @@
-# VELUM — Maison Numérique
+# VAULTÉ — Maison Numérique
 
 > *Your curated link collections, beautifully organised.*
 
@@ -7,7 +7,7 @@
 ## Project Structure
 
 ```
-velum/
+vaulte/
 ├── index.html       ← Main HTML (layout & mascot SVG)
 ├── style.css        ← All styles & themes (edit here to customise)
 ├── script.js        ← All logic (storage, render, export/import)
@@ -22,7 +22,7 @@ velum/
 ## Opening in VS Code
 
 1. Unzip the folder
-2. Open VS Code → **File → Open Folder** → select the `velum` folder
+2. Open VS Code → **File → Open Folder** → select the `vaulte` folder
 3. Install the recommended extension when prompted: **Live Preview** by Microsoft
 4. Right-click `index.html` in the Explorer → **Open with Live Preview**
 5. Your browser tab will auto-reload whenever you save a file

@@ -1,9 +1,9 @@
 /* ============================================================
-   VELUM — script.js
+   VAULTÉ — script.js
    ============================================================
    Sections:
    1. Sakura Petals
-   2. Mascot Speech
+  2. Bunny Speech
    3. Motivational Quotes
    4. Theme & Font Preferences
    5. Topic Icons
@@ -36,60 +36,111 @@
 }());
 
 
-/* ============================================================
-   2. MASCOT SPEECH
-   Each theme has its own set of lines.
-   Click the bunny to cycle through them.
-   ============================================================ */
-(function initMascot() {
-  const LINES = {
-    classique: [
-      'Bonjour! Ready to curate? 🐇',
-      'A fine collection deserves fine links! ✨',
-      'Click me for a pep talk! 🎩',
-      'Add a link — I will guard it well!',
-      'Elegance is in the details 🍂',
-    ],
-    anime: [
-      'がんばって！You can do it! ✨',
-      'リンクを追加してね！Add your links~ 🌸',
-      '諦めないで！Never give up! 💫',
-      'ようこそ！Welcome to Velum! ⛩️',
-      'クリックしてね！Click me! 🐰',
-    ],
-    sakura: [
-      '桜のように輝いて！Shine like sakura 🌸',
-      '春が来た！Spring is here~ 🌸',
-      'Let your links bloom beautifully!',
-      'Click me for luck! 🍀',
-    ],
-    cyber: [
-      'SYSTEM READY // LINKS SECURED 🌐',
-      'UPLOAD YOUR LINKS. I WILL GUARD THEM.',
-      'ALL SYSTEMS NOMINAL, RABBIT ONLINE ⚡',
-      'CLICK TO ACCESS EASTER EGG [Y/N]',
-    ],
-    noir: [
-      'The archive never sleeps... 🌙',
-      'I have seen things in these links.',
-      'In darkness, your collection shines. ✦',
-      'Every link tells a story. 🎴',
-    ],
-  };
+const bunny = document.getElementById("bunny");
+const speech = document.getElementById("speech");
+const toggleBtn = document.getElementById("toggleBunny");
+const petMessages = [
+  "Pet me more!",
+  "Hop hop!",
+  "I like that!",
+  "You're my friend!",
+  "That tickles!"
+];
+const randomMessages = [
+  "I'm exploring...",
+  "Nice app!",
+  "Can we play?",
+  "I found a cozy spot.",
+  "Hop hop!"
+];
+let hidden = localStorage.getItem("bunnyHidden") === "true";
 
-  const speechEl = document.getElementById('mascotSpeech');
-  const mascot   = document.getElementById('mascot');
+function updateVisibility() {
+  bunny.style.display = hidden ? "none" : "block";
+  toggleBtn.textContent = hidden
+    ? "Show Bunny"
+    : "Hide Bunny";
+}
 
-  function setLine() {
-    const theme = document.body.getAttribute('data-theme') || 'classique';
-    const pool  = LINES[theme] || LINES.classique;
-    speechEl.textContent = pool[Math.floor(Math.random() * pool.length)];
+function speak(text) {
+  speech.textContent = text;
+  const rect = bunny.getBoundingClientRect();
+  speech.style.left = rect.left + "px";
+  speech.style.top = (rect.top - 60) + "px";
+  speech.style.display = "block";
+  clearTimeout(window.speechTimeout);
+  window.speechTimeout = setTimeout(() => {
+    speech.style.display = "none";
+  }, 3000);
+}
+
+function hopToRandomSpot() {
+  if (hidden) return;
+  const maxX = window.innerWidth - 100;
+  const maxY = window.innerHeight - 100;
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+  bunny.style.transform = "translateY(-40px)";
+  setTimeout(() => {
+    bunny.style.left = `${x}px`;
+    bunny.style.top = `${y}px`;
+    bunny.style.transform = "translateY(0)";
+  }, 300);
+}
+
+function randomBehavior() {
+  if (hidden) return;
+  const msg =
+    randomMessages[
+      Math.floor(Math.random() * randomMessages.length)
+    ];
+  speak(msg);
+  hopToRandomSpot();
+}
+
+bunny.addEventListener("click", () => {
+  const msg =
+    petMessages[
+      Math.floor(Math.random() * petMessages.length)
+    ];
+  bunny.style.transform = "scale(1.25)";
+  setTimeout(() => {
+    bunny.style.transform = "scale(1)";
+  }, 300);
+  speak(msg);
+});
+
+toggleBtn.addEventListener("click", () => {
+  hidden = !hidden;
+  localStorage.setItem(
+    "bunnyHidden",
+    hidden
+  );
+  updateVisibility();
+  if (!hidden) {
+    speak("I'm back!");
   }
+});
 
-  setLine();
-  mascot.addEventListener('click', setLine);
-  document.addEventListener('themechange', setLine); // update when theme switches
-}());
+function playHideAndSeek() {
+  if (hidden) return;
+  speak("Find me!");
+  bunny.style.opacity = "0";
+  setTimeout(() => {
+    hopToRandomSpot();
+    bunny.style.opacity = "1";
+    speak("You found me!");
+  }, 5000);
+}
+
+updateVisibility();
+setInterval(randomBehavior, 15000);
+setInterval(() => {
+  if (Math.random() < 0.3) {
+    playHideAndSeek();
+  }
+}, 45000);
+speak("Hello! I'm BunBun!");
 
 
 /* ============================================================
@@ -129,6 +180,30 @@ const QUOTES = {
     'Collect the shadows. Let the light find you.',
     'What you return to is what you truly value.',
   ],
+  forest: [
+    'In nature, we find clarity. In curation, we find peace.',
+    'Every root grows deep. Every collection grows meaningful.',
+    'The forest breathes in silence. Organize in serenity.',
+    'Grow your collection like ancient trees grow rings.',
+  ],
+  ocean: [
+    'The ocean organizes itself in endless depths. So do you.',
+    'Dive deep into your collections. Surface with clarity.',
+    'Like waves, let your links flow and align.',
+    'In the vastness of the sea, find your beacon.',
+  ],
+  sunset: [
+    'Every sunset is the beginning of a new collection.',
+    'Warm colours, curated thoughts, golden moments.',
+    'The day fades beautifully. Your links glow on.',
+    'Even endings are beautiful when well-organized.',
+  ],
+  midnight: [
+    'The cosmos expands infinitely. So does your imagination.',
+    'Between the stars, find your purpose.',
+    'In the silence of midnight, clarity speaks.',
+    'The universe is vast. Your collection is your constellation.',
+  ],
 };
 
 function showQuote() {
@@ -143,8 +218,8 @@ function showQuote() {
    4. THEME & FONT PREFERENCES
    Stored in localStorage under PREF_KEY.
    ============================================================ */
-const PREF_KEY = 'velum_prefs_v1';
-const DATA_KEY = 'velum_data_v1';
+const PREF_KEY = 'vaulte_prefs_v1';
+const DATA_KEY = 'vaulte_data_v1';
 
 function loadPrefs() {
   try { return JSON.parse(localStorage.getItem(PREF_KEY)) || {}; }
@@ -158,7 +233,7 @@ function applyTheme(t) {
     card.classList.toggle('active', card.dataset.t === t);
   });
   showQuote();
-  document.dispatchEvent(new Event('themechange')); // notify mascot etc.
+  document.dispatchEvent(new Event('themechange')); // notify bunny etc.
   const p = loadPrefs(); p.theme = t; savePrefs(p);
 }
 
@@ -503,7 +578,7 @@ function stateBlob() {
 document.getElementById('exportBtn').addEventListener('click', () => {
   const a = document.createElement('a');
   a.href     = URL.createObjectURL(stateBlob());
-  a.download = `velum-${new Date().toISOString().slice(0, 10)}.json`;
+  a.download = `vaulte-${new Date().toISOString().slice(0, 10)}.json`;
   document.body.appendChild(a); a.click(); a.remove();
   toast('Exported ✓');
 });
@@ -544,7 +619,7 @@ document.getElementById('diskBtn').addEventListener('click', async () => {
   try {
     if (!diskHandle) {
       diskHandle = await window.showSaveFilePicker({
-        suggestedName: 'velum-data.json',
+        suggestedName: 'vaulte-data.json',
         types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
       });
     }
